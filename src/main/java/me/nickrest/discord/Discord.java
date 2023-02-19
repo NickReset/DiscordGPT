@@ -33,6 +33,7 @@ public class Discord {
             e.printStackTrace();
         }
 
+        // register application commands
         List<SlashCommandData> commandData = new ArrayList<>();
         for(Command command : commandManager.getCommands()) {
             SlashCommandData data = Commands.slash(command.getName(), command.getDescription())

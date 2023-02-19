@@ -20,8 +20,8 @@ public class ChatGPT {
             JSONObject json = new JSONObject();
             json.put("model", "text-davinci-003");
             json.put("prompt", message);
-            json.put("temperature", 0);
-            json.put("max_tokens", 90);
+            json.put("temperature", 1);
+            json.put("max_tokens", 500);
 
             URL chatGPT = new URL("https://api.openai.com/v1/completions");
             HttpURLConnection connection = (HttpURLConnection) chatGPT.openConnection();
