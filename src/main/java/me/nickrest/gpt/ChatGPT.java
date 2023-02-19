@@ -10,7 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-// key=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
 @AllArgsConstructor
 @Getter @Setter
 public class ChatGPT {
