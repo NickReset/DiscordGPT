@@ -14,11 +14,12 @@ import java.util.*;
 @CommandInfo(name = "gpt", description = "Generate text using GPT-3")
 public class GPTCommand extends Command {
 
-    Map<User, List<String>> memory = new HashMap<>();
+    Map<String, List<String>> memory = new HashMap<>();
 
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
         OptionMapping textOption = event.getOption("text");
+        event.deferReply().queue();
         User user = event.getUser();
 
         if(textOption == null) {
@@ -26,30 +27,24 @@ public class GPTCommand extends Command {
         }
 
         String text = Objects.requireNonNull(event.getOption("text")).getAsString();
-        List<String> userMemory = memory.get(user);
+        String response;
+        List<String> userMemory = memory.computeIfAbsent(user.getId(), k -> new ArrayList<>());
 
-        StringBuilder startQustion = new StringBuilder();
-        if (userMemory != null) {
-            startQustion.append("Surround code with markdown ticks (```) and put the language after the first set of ticks. Example: ```java\n")
-                    .append("Memory:\n")
-                    .append(String.join("\n", userMemory))
-                    .append("Don't use the memory as a reference, it is just to help you remember what you have said.\n")
-                    .append("\n\n");
+        if (userMemory.size() == 0) {
+            response = Main.getChatGPT().sendRequest(text);
+            userMemory.add("Q: " + text + "\nA: " + response + "\n");
         } else {
-            memory.put(user, userMemory = new ArrayList<>());
+            StringBuilder memoryBuilder = new StringBuilder();
+            for (String s : userMemory) {
+                memoryBuilder.append(s);
+            }
+            memoryBuilder.append("Q: ").append(text).append("\n").append("A: ");
+            response = Main.getChatGPT().sendRequest(memoryBuilder.toString());
+            event.reply(response).queue();
+            userMemory.add("Q: " + text + "\nA: " + response + "\n");
         }
-        String response = Main.getChatGPT().sendRequest(startQustion + "Question: " + text);
-
-        memory.get(user).add(
-                "   Q: " + text + "\n" +
-                "   A: " + response + "\n"
-        );
-
-        if (userMemory.size() > 5) userMemory.remove(0);
-
-//        String response = gpt.sendRequest("Write a response to this question \"" + text + "\" if the question is a codding question surround it with ``` on both sides. and for the first the first ticks put the language you are using. but only if it is a coding answer.");
-
-        event.reply(Main.getChatGPT().sendRequest(text).trim()).queue();
-        //        event.reply(response.trim()).queue();
+        if (userMemory.size() > 10) {
+            userMemory.remove(0);
+        }
     }
 }
