@@ -14,6 +14,7 @@ public class Main {
 
     @Getter
     public static ChatGPT chatGPT;
+    @Getter
     public static Discord discord;
 
     public static void main(String[] args) {

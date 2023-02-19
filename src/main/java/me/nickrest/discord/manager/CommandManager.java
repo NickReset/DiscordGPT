@@ -2,7 +2,9 @@ package me.nickrest.discord.manager;
 
 import lombok.Getter;
 import me.nickrest.discord.command.Command;
+import me.nickrest.discord.command.commands.ClearMemoryCommand;
 import me.nickrest.discord.command.commands.GPTCommand;
+import me.nickrest.discord.command.commands.ViewMemoryCommand;
 import me.nickrest.discord.command.data.CommandArgument;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -20,6 +22,8 @@ public class CommandManager {
                         CommandArgument.of(OptionType.STRING, "text", "The text to generate", true)
                 )
         );
+        register(new ClearMemoryCommand());
+        register(new ViewMemoryCommand());
     }
 
     public void register(Command command) {
