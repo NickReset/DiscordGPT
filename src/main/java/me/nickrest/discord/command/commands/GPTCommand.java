@@ -19,7 +19,14 @@ public class GPTCommand extends Command {
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
         String startingText = "Hello! You are a bot named GPT that can talk to humans from Discord. Surround code with markdown ticks (```) and put the language after the first set of ticks. Only if the response has a code block." +
-                "\nUser: " + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "\n";
+                "\nUser: " +
+                "   ID: " + event.getUser().getId() +
+                "   name: " + event.getUser().getName() +
+                "   Discriminator: " + event.getUser().getDiscriminator() +
+                "   Avatar: " + event.getUser().getAvatarUrl() +
+                "   How to ping: <@" + event.getUser().getId() + ">" +
+                "   You are created by NickRest#3939 & God Mode#0949" +
+                "   Make all responses sound human";
         OptionMapping textOption = event.getOption("text");
         event.deferReply().queue();
         User user = event.getUser();
@@ -43,9 +50,6 @@ public class GPTCommand extends Command {
             response = Main.getChatGPT().sendRequest(startingText + "\n" + memoryBuilder);
         }
         event.getHook().editOriginal(response).queue();
-        System.out.println(userMemory.toString());
-        System.out.println(text);
-        System.out.println(response);
         userMemory.add("Q: " + text + "\nA: " + response + "\n");
         if (userMemory.size() > 10) {
             userMemory.remove(0);
