@@ -10,7 +10,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Getter @Setter
 public class Discord {
@@ -31,15 +33,17 @@ public class Discord {
             e.printStackTrace();
         }
 
+        List<SlashCommandData> commandData = new ArrayList<>();
         for(Command command : commandManager.getCommands()) {
             SlashCommandData data = Commands.slash(command.getName(), command.getDescription())
                     .setDefaultPermissions(command.getDefaultMemberPermissions())
                     .setGuildOnly(command.isGuildOnly());
 
             Arrays.stream(command.getArguments()).forEach((argument -> data.addOption(argument.type(), argument.name(), argument.description(), argument.required())));
-            jda.updateCommands().addCommands(data).queue();
+            commandData.add(data);
         }
 
+        jda.updateCommands().addCommands(commandData).queue();
     }
 
 }
