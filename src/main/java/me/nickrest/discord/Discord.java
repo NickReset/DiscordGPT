@@ -33,9 +33,6 @@ public class Discord {
             e.printStackTrace();
         }
 
-        // clear application commands
-        jda.updateCommands().queue();
-
         // register application commands
         List<SlashCommandData> commandData = new ArrayList<>();
         for(Command command : commandManager.getCommands()) {
