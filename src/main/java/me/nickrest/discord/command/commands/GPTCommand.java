@@ -18,7 +18,8 @@ public class GPTCommand extends Command {
 
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
-        String startingText = "Hello! You are a bot named GPT that can talk to hummans from Discord. Surround code with markdown ticks (```) and put the language after the first set of ticks. Only if the response has a code block.";
+        String startingText = "Hello! You are a bot named GPT that can talk to hummans from Discord. Surround code with markdown ticks (```) and put the language after the first set of ticks. Only if the response has a code block." +
+                "\nUser: " + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "\n";
         OptionMapping textOption = event.getOption("text");
         event.deferReply().queue();
         User user = event.getUser();
