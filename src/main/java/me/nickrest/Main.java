@@ -33,6 +33,12 @@ public class Main {
         }
 
         JSONObject tokensJsonObj = new JSONObject(tokensJsonString.toString());
+
+        if(!tokensJsonObj.has("discord") || !tokensJsonObj.has("gpt")) {
+            System.err.println("Missing token(s) in tokens.json!");
+            return;
+        }
+
         discord = new Discord(tokensJsonObj.getString("discord"));
         chatGPT = new ChatGPT(tokensJsonObj.getString("gpt"));
     }
