@@ -3,6 +3,8 @@ package me.nickrest.discord.manager;
 import lombok.Getter;
 import me.nickrest.discord.command.Command;
 import me.nickrest.discord.command.commands.GPTCommand;
+import me.nickrest.discord.command.data.CommandArgument;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,11 @@ public class CommandManager {
     private final List<Command> commands = new ArrayList<>();
 
     public CommandManager() {
-        register(new GPTCommand());
+        register(new GPTCommand()
+                .arguments(
+                        CommandArgument.of(OptionType.STRING, "text", "The text to generate", true)
+                )
+        );
     }
 
     public void register(Command command) {

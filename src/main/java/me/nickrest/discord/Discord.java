@@ -8,6 +8,9 @@ import me.nickrest.discord.manager.CommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+
+import java.util.Arrays;
 
 @Getter @Setter
 public class Discord {
@@ -29,11 +32,12 @@ public class Discord {
         }
 
         for(Command command : commandManager.getCommands()) {
-            jda.updateCommands().addCommands(
-                    Commands.slash(command.getName(), command.getDescription())
-                            .setDefaultPermissions(command.getDefaultMemberPermissions())
-                            .setGuildOnly(command.isGuildOnly())
-            ).queue();
+            SlashCommandData data = Commands.slash(command.getName(), command.getDescription())
+                    .setDefaultPermissions(command.getDefaultMemberPermissions())
+                    .setGuildOnly(command.isGuildOnly());
+
+            Arrays.stream(command.getArguments()).forEach((argument -> data.addOption(argument.type(), argument.name(), argument.description(), argument.required())));
+            jda.updateCommands().addCommands(data).queue();
         }
 
     }

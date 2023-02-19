@@ -1,5 +1,6 @@
 package me.nickrest;
 
+import lombok.Getter;
 import me.nickrest.discord.Discord;
 import me.nickrest.gpt.ChatGPT;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.io.IOException;
 
 public class Main {
 
+    @Getter
     public static ChatGPT chatGPT;
     public static Discord discord;
 
