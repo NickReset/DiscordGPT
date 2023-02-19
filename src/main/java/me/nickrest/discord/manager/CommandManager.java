@@ -2,9 +2,7 @@ package me.nickrest.discord.manager;
 
 import lombok.Getter;
 import me.nickrest.discord.command.Command;
-import me.nickrest.discord.command.commands.ClearMemoryCommand;
-import me.nickrest.discord.command.commands.GPTCommand;
-import me.nickrest.discord.command.commands.ViewMemoryCommand;
+import me.nickrest.discord.command.commands.*;
 import me.nickrest.discord.command.data.CommandArgument;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -24,6 +22,15 @@ public class CommandManager {
         );
         register(new ClearMemoryCommand());
         register(new ViewMemoryCommand());
+        register(new CodeGPTCommand()
+                .arguments(
+                        CommandArgument.of(OptionType.STRING, "text", "The text to generate", true),
+                        CommandArgument.of(OptionType.STRING, "language", "The language to generate code in", true)
+                ));
+        register(new ImageGPTCommand()
+                .arguments(
+                        CommandArgument.of(OptionType.STRING, "text", "The text to generate", true)
+                ));
     }
 
     public void register(Command command) {
