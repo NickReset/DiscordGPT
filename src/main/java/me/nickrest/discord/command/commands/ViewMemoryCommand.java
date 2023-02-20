@@ -21,18 +21,10 @@ public class ViewMemoryCommand extends Command {
             sb.append((i + 1) + ": " + gptCommand.getMemory().get(event.getUser().getId()).get(i));
         }
         String text = sb.toString();
-        // split text into chunks of 2000 characters
-        String[] chunks = text.split("/.{1,2000}/g");
-        if (chunks.length == 1) {
-            event.getHook().editOriginal(chunks[0]).queue();
-        } else {
-            for (int i = 0; i < chunks.length; i++) {
-                if (i == 0) {
-                    event.getHook().editOriginal(chunks[i]).queue();
-                } else {
-                    event.getChannel().sendMessage(chunks[i]).queue();
-                }
-            }
+        try {
+            event.getHook().editOriginal(text).queue();
+        } catch (Exception e) {
+            event.getHook().editOriginal(Main.getHastebin().sendRequest(text, event.getUser().getAsTag())).queue();
         }
     }
 }

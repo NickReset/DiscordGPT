@@ -3,6 +3,7 @@ package me.nickrest;
 import lombok.Getter;
 import me.nickrest.discord.Discord;
 import me.nickrest.gpt.ChatGPT;
+import me.nickrest.hastebin.Hastebin;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -16,6 +17,8 @@ public class Main {
     public static ChatGPT chatGPT;
     @Getter
     public static Discord discord;
+    @Getter
+    public static Hastebin hastebin;
 
     public static void main(String[] args) {
         File tokensJson = new File("tokens.json");
@@ -57,12 +60,14 @@ public class Main {
             return;
         }
 
-        if (tokensJsonObj.getString("discord").equals("TOKENGOESHERE") || tokensJsonObj.getString("gpt").equals("TOKENGOESHERE")) {
+        if (tokensJsonObj.getString("discord").equals("TOKENGOESHERE") ||
+                tokensJsonObj.getString("gpt").equals("TOKENGOESHERE")) {
             System.err.println("Please fill in the tokens in tokens.json!");
             return;
         }
 
         discord = new Discord(tokensJsonObj.getString("discord"));
         chatGPT = new ChatGPT(tokensJsonObj.getString("gpt"));
+        hastebin = new Hastebin("https://api.paste.gg/v1");
     }
 }

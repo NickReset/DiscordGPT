@@ -49,7 +49,11 @@ public class GPTCommand extends Command {
             memoryBuilder.append("Q: ").append(text).append("\n").append("A: ");
             response = Main.getChatGPT().sendRequest(startingText + "\n" + memoryBuilder);
         }
-        event.getHook().editOriginal(response).queue();
+        try {
+            event.getHook().editOriginal(response).queue();
+        } catch (Exception e) {
+            event.getHook().editOriginal(Main.getHastebin().sendRequest(response, user.getAsTag())).queue();
+        }
         userMemory.add("Q: " + text + "\nA: " + response + "\n");
         if (userMemory.size() > 10) {
             userMemory.remove(0);
