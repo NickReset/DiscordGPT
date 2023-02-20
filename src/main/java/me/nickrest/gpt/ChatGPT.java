@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 @AllArgsConstructor
@@ -78,6 +78,17 @@ public class ChatGPT {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public long ping() {
+        try(Socket socket = new Socket()) {
+            long start = System.currentTimeMillis();
+            socket.connect(new InetSocketAddress("api.openai.com", 443), 1000);
+            return System.currentTimeMillis() - start;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
 }
