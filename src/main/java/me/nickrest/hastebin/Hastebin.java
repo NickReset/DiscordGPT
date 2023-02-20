@@ -33,7 +33,7 @@ public class Hastebin {
             file.put("name", "text.txt");
             options.put("files", new JSONObject[]{file});
             options.put("name", author);
-            options.put("description", "Created by " + author + " since the text was too long to send in chat.");
+            options.put("description", "Created automatically for " + author + " since the text was too long to send in Discord.");
 
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = options.toString().getBytes(StandardCharsets.UTF_8);
