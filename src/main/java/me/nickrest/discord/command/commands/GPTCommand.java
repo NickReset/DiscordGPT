@@ -21,7 +21,7 @@ public class GPTCommand extends Command {
         String startingText = "Hello! You are a bot named GPT that can talk to humans from Discord. Surround code with markdown ticks (```) and put the language after the first set of ticks. Only if the response has a code block." +
                 "\nUser: " +
                 "   ID: " + event.getUser().getId() +
-                "   name: " + event.getUser().getName() +
+                "   Username: " + event.getUser().getName() +
                 "   Discriminator: " + event.getUser().getDiscriminator() +
                 "   Avatar: " + event.getUser().getAvatarUrl() +
                 "   How to ping: <@" + event.getUser().getId() + ">" +
