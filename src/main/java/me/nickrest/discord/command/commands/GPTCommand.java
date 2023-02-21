@@ -52,6 +52,7 @@ public class GPTCommand extends Command {
         try {
             Main.getLogger().info("Attempting to send response to the user.");
             event.getHook().editOriginal(response).queue();
+            Main.getLogger().info("Successfully sent response to the user.");
         } catch (Exception e) {
             Main.getLogger().warn("Failed to send response to the user, sending to hastebin instead.");
             event.getHook().editOriginal(Main.getHastebin().sendRequest(response, user.getAsTag())).queue();

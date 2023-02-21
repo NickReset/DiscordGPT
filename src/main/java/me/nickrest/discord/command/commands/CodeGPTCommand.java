@@ -28,6 +28,7 @@ public class CodeGPTCommand extends Command {
         try {
             Main.getLogger().info("Attempting to send code response to the user.");
             event.getHook().editOriginal(formattedResponse).queue();
+            Main.getLogger().info("Successfully sent code response to the user.");
         } catch (Exception e) {
             Main.getLogger().warn("Failed to send code response to the user, sending to hastebin instead.");
             event.getHook().editOriginal(Main.getHastebin().sendRequest(formattedResponse, event.getUser().getAsTag())).queue();

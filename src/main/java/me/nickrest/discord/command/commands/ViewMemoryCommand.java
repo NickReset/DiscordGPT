@@ -24,6 +24,7 @@ public class ViewMemoryCommand extends Command {
         try {
             Main.getLogger().info("Attempting to send memory to the user.");
             event.getHook().editOriginal(text).queue();
+            Main.getLogger().info("Successfully sent memory to the user.");
         } catch (Exception e) {
             Main.getLogger().warn("Failed to send memory to the user, sending to hastebin instead.");
             event.getHook().editOriginal(Main.getHastebin().sendRequest(text, event.getUser().getAsTag())).queue();
