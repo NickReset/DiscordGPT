@@ -15,6 +15,10 @@ public class ImageGPTCommand extends Command {
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
         event.deferReply().queue();
+        if (!event.getChannel().getFlags().contains("NSFW")) {
+            event.getHook().editOriginal("This command can only be used in NSFW channels!").queue();
+            return;
+        }
         String text = Objects.requireNonNull(event.getOption("text")).getAsString();
         try {
             event.getHook().editOriginal("https://image.pollinations.ai/prompt/" + URLEncoder.encode(text, StandardCharsets.UTF_8)).queue();

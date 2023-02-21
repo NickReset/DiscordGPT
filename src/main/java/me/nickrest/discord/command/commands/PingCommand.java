@@ -1,5 +1,6 @@
 package me.nickrest.discord.command.commands;
 
+import me.nickrest.Main;
 import me.nickrest.discord.command.Command;
 import me.nickrest.discord.command.data.CommandInfo;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -10,11 +11,16 @@ public class PingCommand extends Command {
 
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
+        long restPing = event.getJDA().getRestPing().complete(), gatewayPing = event.getJDA().getGatewayPing(), openAIPing = Main.getChatGPT().ping();
         long time = System.currentTimeMillis();
-        event.reply("Fetching Bots Ping!")
-                .setEphemeral(true)
-                .flatMap(v -> event.getHook().editOriginalFormat("Ping: %d ms", System.currentTimeMillis() - time))
-                .queue();
+        event.deferReply().setEphemeral(true).flatMap(v -> (
+                event.getHook().editOriginalFormat("Pong!\nRound Trip: %sms\nRest Ping %sms\nGateway Ping %sms\nOpenAI Ping: %sms",
+                        System.currentTimeMillis() - time,
+                        restPing,
+                        gatewayPing,
+                        openAIPing
+                )
+        )).queue();
     }
 
 }
