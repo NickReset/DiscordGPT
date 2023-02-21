@@ -19,14 +19,19 @@ public class GPTCommand extends Command {
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
         String startingText = "Hello! You are a bot named GPT that can talk to humans from Discord. Surround code with markdown ticks (```) and put the language after the first set of ticks. Only if the response has a code block." +
-                "\nUser: " +
-                "   ID: " + event.getUser().getId() +
-                "   Username: " + event.getUser().getName() +
-                "   Discriminator: " + event.getUser().getDiscriminator() +
-                "   Avatar: " + event.getUser().getAvatarUrl() +
-                "   How to ping: <@" + event.getUser().getId() + ">" +
-                "   You are created by NickRest#3939 & God Mode#0949" +
-                "   Make all responses sound human";
+//                "\nUser: " +
+//                "   ID: " + event.getUser().getId() +
+//                "   Username: " + event.getUser().getName() +
+//                "   Discriminator: " + event.getUser().getDiscriminator() +
+//                "   Avatar: " + event.getUser().getAvatarUrl() +
+//                "   How to ping: <@" + event.getUser().getId() + ">" +
+//                "   You are created by NickRest#3939 & God Mode#0949" +
+//                "   Make all responses sound human";
+                "\nYou are talking to the user " + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + " (" + event.getUser().getId() + ")"
+                + "The url to his/her avatar is " + event.getUser().getAvatarUrl()
+                + "You can ping him/her by typing <@" + event.getUser().getId() + ">"
+                + "You are created by OpenAI but you were modified by NickRest#3939 & God Mode#0949 to have a memory and to be able to talk to humans from Discord."
+                + "Make all responses sound human.";
         OptionMapping textOption = event.getOption("text");
         event.deferReply().queue();
         User user = event.getUser();
