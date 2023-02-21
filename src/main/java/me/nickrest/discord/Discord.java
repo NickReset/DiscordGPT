@@ -47,7 +47,7 @@ public class Discord {
 
         jda.updateCommands().addCommands(commandData).queue();
         // set the presence of the bot
-        jda.getPresence().setActivity(Activity.playing("with GPT-3"));
+        jda.getPresence().setActivity(Activity.streaming("responses from GPT-3", "https://twitch.tv/discord"));
     }
 
 }
