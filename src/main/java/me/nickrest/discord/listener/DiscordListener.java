@@ -1,6 +1,7 @@
 package me.nickrest.discord.listener;
 
 import lombok.AllArgsConstructor;
+import me.nickrest.Main;
 import me.nickrest.discord.Discord;
 import me.nickrest.discord.command.Command;
 import me.nickrest.discord.manager.CommandManager;
@@ -18,9 +19,12 @@ public class DiscordListener extends ListenerAdapter {
         CommandManager commandManager = discord.getCommandManager();
         Command foundCommand = commandManager.getCommand(event.getName());
 
-        if (foundCommand == null)
+        if (foundCommand == null) {
+            Main.getLogger().warn("Command not found: " + event.getName());
             return;
+        }
 
+        Main.getLogger().info("Handling command: " + event.getName());
         foundCommand.handle(event);
     }
 }

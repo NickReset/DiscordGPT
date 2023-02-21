@@ -1,6 +1,7 @@
 package me.nickrest.hastebin;
 
 import lombok.AllArgsConstructor;
+import me.nickrest.Main;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -39,6 +40,7 @@ public class Hastebin {
             }
 
             if (connection.getResponseCode() != 201) {
+                Main.getLogger().error("Error while sending request to hastebin: " + connection.getResponseCode() + " " + connection.getResponseMessage());
                 return null;
             }
 

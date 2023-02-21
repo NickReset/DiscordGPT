@@ -3,6 +3,7 @@ package me.nickrest.gpt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import me.nickrest.Main;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class ChatGPT {
             JSONObject choices = responded.getJSONArray("choices").getJSONObject(0);
             return choices.getString("text").trim();
         } catch (Exception e) {
+            Main.getLogger().warn("Failed to send request to OpenAI API");
             e.printStackTrace();
         }
         return null;
@@ -75,6 +77,7 @@ public class ChatGPT {
             return choices.getString("text").trim();
 
         } catch (Exception e) {
+            Main.getLogger().warn("Failed to send coding request to OpenAI API");
             e.printStackTrace();
         }
         return null;
@@ -86,6 +89,7 @@ public class ChatGPT {
             socket.connect(new InetSocketAddress("api.openai.com", 443), 1000);
             return System.currentTimeMillis() - start;
         } catch (Exception e) {
+            Main.getLogger().warn("Failed to ping OpenAI API");
             e.printStackTrace();
             return -1;
         }

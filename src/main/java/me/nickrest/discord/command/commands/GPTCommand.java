@@ -50,8 +50,10 @@ public class GPTCommand extends Command {
             response = Main.getChatGPT().sendRequest(startingText + "\n" + memoryBuilder);
         }
         try {
+            Main.getLogger().info("Attempting to send response to the user.");
             event.getHook().editOriginal(response).queue();
         } catch (Exception e) {
+            Main.getLogger().warn("Failed to send response to the user, sending to hastebin instead.");
             event.getHook().editOriginal(Main.getHastebin().sendRequest(response, user.getAsTag())).queue();
         }
         userMemory.add("Q: " + text + "\nA: " + response + "\n");

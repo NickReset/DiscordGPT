@@ -26,8 +26,10 @@ public class CodeGPTCommand extends Command {
         String formattedResponse = String.format("```%s\n%s\n```", language, response);
 
         try {
+            Main.getLogger().info("Attempting to send code response to the user.");
             event.getHook().editOriginal(formattedResponse).queue();
         } catch (Exception e) {
+            Main.getLogger().warn("Failed to send code response to the user, sending to hastebin instead.");
             event.getHook().editOriginal(Main.getHastebin().sendRequest(formattedResponse, event.getUser().getAsTag())).queue();
         }
 

@@ -76,5 +76,10 @@ public class Main {
         discord = new Discord(tokensJsonObj.getString("discord"));
         chatGPT = new ChatGPT(tokensJsonObj.getString("gpt"));
         hastebin = new Hastebin("https://api.paste.gg/v1");
+
+        // handle errors
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            logger.error("Uncaught exception in thread " + t.getName(), e);
+        });
     }
 }
