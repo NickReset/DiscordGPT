@@ -5,7 +5,6 @@ import me.nickrest.discord.command.data.CommandInfo;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -15,7 +14,7 @@ public class ImageGPTCommand extends Command {
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
         event.deferReply().queue();
-        if (!event.getChannel().getFlags().contains("NSFW")) {
+        if (!event.getChannel().asTextChannel().isNSFW()) {
             event.getHook().editOriginal("This command can only be used in NSFW channels!").queue();
             return;
         }
