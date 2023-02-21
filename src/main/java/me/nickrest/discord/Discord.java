@@ -47,7 +47,8 @@ public class Discord {
 
         jda.updateCommands().addCommands(commandData).queue();
         // set the presence of the bot
-        jda.getPresence().setActivity(Activity.streaming("responses from GPT-3", "https://twitch.tv/discord"));
+        jda.getPresence().setActivity(Activity.streaming("with GPT-3", "https://twitch.tv/discord"));
+        // $browser: "Discord IOS
     }
 
 }
