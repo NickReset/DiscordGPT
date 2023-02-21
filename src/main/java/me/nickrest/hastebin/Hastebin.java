@@ -1,5 +1,6 @@
 package me.nickrest.hastebin;
 
+import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -7,13 +8,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+@AllArgsConstructor
 public class Hastebin {
 
     private final String API_URL;
-
-    public Hastebin(String API_URL) {
-        this.API_URL = API_URL;
-    }
 
     public String sendRequest(String text, String author) {
         try {
