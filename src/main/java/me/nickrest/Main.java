@@ -4,6 +4,8 @@ import lombok.Getter;
 import me.nickrest.discord.Discord;
 import me.nickrest.gpt.ChatGPT;
 import me.nickrest.hastebin.Hastebin;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -19,8 +21,13 @@ public class Main {
     public static Discord discord;
     @Getter
     public static Hastebin hastebin;
+    @Getter
+    public static Logger logger;
 
     public static void main(String[] args) {
+        // start log4j logger
+        logger = Logger.getLogger(Main.class);
+        BasicConfigurator.configure();
         File tokensJson = new File("tokens.json");
         if(!tokensJson.exists()) {
             System.out.println("tokens.json not found!");
