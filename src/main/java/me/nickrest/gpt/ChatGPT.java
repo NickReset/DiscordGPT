@@ -19,7 +19,7 @@ public class ChatGPT {
     public String sendRequest(String message) {
         try {
             JSONObject json = new JSONObject();
-            json.put("model", "text-davinci-003");
+            json.put("model", "text-ada-001");
             json.put("prompt", message);
             json.put("temperature", 1);
             json.put("max_tokens", 500);
