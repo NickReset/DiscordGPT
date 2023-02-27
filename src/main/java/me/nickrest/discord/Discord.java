@@ -7,6 +7,7 @@ import me.nickrest.discord.listener.DiscordListener;
 import me.nickrest.discord.manager.CommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -48,7 +49,6 @@ public class Discord {
         jda.updateCommands().addCommands(commandData).queue();
         // set the presence of the bot
         jda.getPresence().setActivity(Activity.streaming("with GPT-3", "https://twitch.tv/discord"));
-        // $browser: "Discord IOS
     }
 
 }

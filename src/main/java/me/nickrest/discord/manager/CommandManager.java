@@ -32,6 +32,7 @@ public class CommandManager {
                         CommandArgument.of(OptionType.STRING, "text", "The text to generate", true)
                 ));
         register(new PingCommand());
+        register(new ServerCountCommand());
     }
 
     public void register(Command command) {
