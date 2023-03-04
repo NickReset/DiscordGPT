@@ -1,4 +1,4 @@
-package me.nickrest.hastebin;
+package me.nickrest.util;
 
 import lombok.AllArgsConstructor;
 import me.nickrest.Main;

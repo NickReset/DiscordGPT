@@ -33,6 +33,7 @@ public class CommandManager {
                 ));
         register(new PingCommand());
         register(new ServerCountCommand());
+        register(new ListGuildsCommand());
     }
 
     public void register(Command command) {

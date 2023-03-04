@@ -8,4 +8,5 @@ public @interface CommandInfo {
     String name();
     String description();
     boolean guildOnly() default true;
+    boolean devOnly() default false;
 }

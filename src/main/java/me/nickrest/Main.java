@@ -2,56 +2,62 @@ package me.nickrest;
 
 import lombok.Getter;
 import me.nickrest.discord.Discord;
-import me.nickrest.gpt.ChatGPT;
-import me.nickrest.hastebin.Hastebin;
+import me.nickrest.util.ChatGPT;
+import me.nickrest.util.config.Config;
+import me.nickrest.util.Hastebin;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 
     @Getter
     public static ChatGPT chatGPT;
+
     @Getter
     public static Discord discord;
+
     @Getter
     public static Hastebin hastebin;
+
     @Getter
     public static Logger logger;
 
-    public static void main(String[] args) {
+    @Getter
+    public static Config config;
+
+    public static void main(String[] args) throws IOException {
         // start log4j logger
         logger = Logger.getLogger(Main.class);
         BasicConfigurator.configure();
-        File tokensJson = new File("tokens.json");
-        if(!tokensJson.exists()) {
-            System.out.println("tokens.json not found!");
-            // create the file tokens.json
-            try {
-                tokensJson.createNewFile();
-                JSONObject tokensJsonObj = new JSONObject();
-                tokensJsonObj.put("discord", "TOKENGOESHERE");
-                tokensJsonObj.put("gpt", "TOKENGOESHERE");
-                System.out.println("tokens.json created! Please fill in the tokens and restart the bot.");
-                // create a file writer to write the tokens to the file
-                try (FileWriter writer = new FileWriter(tokensJson)) {
-                    writer.write(tokensJsonObj.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        File configJson = new File("config.json");
+        if(!configJson.exists()) {
+            logger.info("config.json not found!");
+
+            createNewFile(configJson);
+
+            JSONObject configJsonObj = new JSONObject();
+            configJsonObj.put("discord-token", "TOKEN_GOES_HERE");
+            configJsonObj.put("gpt-token", "TOKEN_GOES_HERE");
+            configJsonObj.put("devs", new ArrayList<>());
+
+            logger.info("config.json created! Please fill in the tokens and restart the bot.");
+
+            FileWriter writer = new FileWriter(configJson);
+            writer.write(configJsonObj.toString());
+            writer.close();
             return;
         }
 
         StringBuilder tokensJsonString = new StringBuilder();
-        try(FileReader reader = new FileReader(tokensJson)) {
+        try(FileReader reader = new FileReader(configJson)) {
             int c;
             while((c = reader.read()) != -1) {
                 tokensJsonString.append((char) c);
@@ -60,26 +66,43 @@ public class Main {
             e.printStackTrace();
         }
 
-        JSONObject tokensJsonObj = new JSONObject(tokensJsonString.toString());
+        JSONObject configJsonObj = new JSONObject(tokensJsonString.toString());
 
-        if(!tokensJsonObj.has("discord") || !tokensJsonObj.has("gpt")) {
-            System.err.println("Missing token(s) in tokens.json!");
+        if(!configJsonObj.has("discord-token") || !configJsonObj.has("gpt-token")) {
+            logger.error("Missing token(s) in config.json!");
             return;
         }
 
-        if (tokensJsonObj.getString("discord").equals("TOKENGOESHERE") ||
-                tokensJsonObj.getString("gpt").equals("TOKENGOESHERE")) {
-            System.err.println("Please fill in the tokens in tokens.json!");
+        if (configJsonObj.getString("discord-token").equals("TOKEN_GOES_HERE") || configJsonObj.getString("gpt-token").equals("TOKEN_GOES_HERE")) {
+            logger.error("Please fill in the tokens in config.json!");
             return;
         }
 
-        discord = new Discord(tokensJsonObj.getString("discord"));
-        chatGPT = new ChatGPT(tokensJsonObj.getString("gpt"));
+        config = new Config();
+        for(String key : configJsonObj.keySet()) {
+            if(configJsonObj.get(key) instanceof JSONObject) {
+                config.set(key, configJsonObj.getJSONObject(key).toMap());
+                continue;
+            }
+
+            if(configJsonObj.get(key) instanceof JSONArray) {
+                config.set(key, configJsonObj.getJSONArray(key).toList());
+                continue;
+            }
+
+            config.set(key, configJsonObj.get(key));
+        }
+
+        discord = new Discord(config.getString("discord-token"));
+        chatGPT = new ChatGPT(config.getString("gpt-token"));
         hastebin = new Hastebin("https://api.paste.gg/v1");
 
         // handle errors
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            logger.error("Uncaught exception in thread " + t.getName(), e);
-        });
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.error("Uncaught exception in thread " + t.getName(), e));
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void createNewFile(File file) throws IOException {
+        file.createNewFile();
     }
 }

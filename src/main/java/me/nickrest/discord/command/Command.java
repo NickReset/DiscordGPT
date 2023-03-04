@@ -16,7 +16,7 @@ public abstract class Command {
     private String name, description;
     private DefaultMemberPermissions defaultMemberPermissions;
     private CommandArgument[] arguments = {};
-    private boolean guildOnly;
+    private boolean guildOnly, devOnly;
 
     public Command() {
         if(info == null) {
@@ -27,6 +27,7 @@ public abstract class Command {
         description = info.description();
         defaultMemberPermissions = DefaultMemberPermissions.ENABLED;
         guildOnly = info.guildOnly();
+        devOnly = info.devOnly();
     }
 
     public abstract void handle(@NotNull SlashCommandInteractionEvent event);

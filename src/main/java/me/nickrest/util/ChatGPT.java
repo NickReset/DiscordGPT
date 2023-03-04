@@ -1,4 +1,4 @@
-package me.nickrest.gpt;
+package me.nickrest.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
