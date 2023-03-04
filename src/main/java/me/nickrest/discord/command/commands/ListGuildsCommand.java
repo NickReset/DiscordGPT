@@ -24,24 +24,23 @@ public class ListGuildsCommand extends Command {
         for (Guild guild : event.getJDA().getGuilds()) {
             count++;
 
+            if(count != page) continue;
+
             String guildInfo =
                     "Guild: " + guild.getName() + " `" + guild.getId() + "`\n" +
                     "Owner: " + (guild.getOwner() == null ? "Unknown" : "`" + guild.getOwner().getUser().getAsTag() + "`") + "\n" +
                     "Members: " + guild.getMemberCount() + "\n";
 
-            builder.addField("Guild Info", guildInfo, false);
-
-            if(count == page) {
-                event.replyEmbeds(
-                        builder
-                                .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
-                                .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                                .build()
-                        )
-                        .setEphemeral(true)
-                        .queue();
-                return;
-            }
+            event.replyEmbeds(
+                    builder
+                            .addField("Guild Info", guildInfo, false)
+                            .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
+                            .setThumbnail(guild.getIconUrl() == null ? event.getJDA().getSelfUser().getAvatarUrl() : guild.getIconUrl())
+                            .build()
+                    )
+                    .setEphemeral(true)
+                    .queue();
+            return;
         }
         builder.setFooter("Requested by " + event.getUser().getAsTag(), event.getUser().getAvatarUrl());
 
