@@ -20,8 +20,10 @@ public class ListGuildsCommand extends Command {
 
         EmbedBuilder builder = new EmbedBuilder().setTitle("Server Count `" + event.getJDA().getGuilds().size() + "`" + " | Page `" + page + "`");
 
-        int count = 1;
+        int count = 0;
         for (Guild guild : event.getJDA().getGuilds()) {
+            count++;
+
             String guildInfo =
                     "Guild: " + guild.getName() + " `" + guild.getId() + "`\n" +
                     "Owner: " + (guild.getOwner() == null ? "Unknown" : "`" + guild.getOwner().getUser().getAsTag() + "`") + "\n" +
@@ -29,21 +31,16 @@ public class ListGuildsCommand extends Command {
 
             builder.addField("Guild Info", guildInfo, false);
 
-            if (builder.build().toString().length() + guildInfo.length() > 6000) {
-                count++;
-
-                if(count == page) {
-                    event.replyEmbeds(
-                            builder
-                                    .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
-                                    .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                                    .build()
-                            )
-                            .setEphemeral(true)
-                            .queue();
-                }
-
-                builder = new EmbedBuilder();
+            if(count == page) {
+                event.replyEmbeds(
+                        builder
+                                .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
+                                .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
+                                .build()
+                        )
+                        .setEphemeral(true)
+                        .queue();
+                return;
             }
         }
         builder.setFooter("Requested by " + event.getUser().getAsTag(), event.getUser().getAvatarUrl());
