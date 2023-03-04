@@ -33,7 +33,11 @@ public class CommandManager {
                 ));
         register(new PingCommand());
         register(new ServerCountCommand());
-        register(new ListGuildsCommand());
+        register(new ListGuildsCommand()
+                .arguments(
+                        CommandArgument.of(OptionType.INTEGER, "page", "The page to view", false)
+                )
+        );
     }
 
     public void register(Command command) {

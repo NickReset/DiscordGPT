@@ -9,28 +9,50 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Objects;
 
 @CommandInfo(name = "listguilds", description = "Lists all guilds the bot is in.", devOnly = true)
 public class ListGuildsCommand extends Command {
 
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
-        EmbedBuilder builder = new EmbedBuilder().setTitle("Server Count `" + event.getJDA().getGuilds().size() + "`");
+        int page = event.getOption("page") == null ? 1 : Objects.requireNonNull(event.getOption("page")).getAsInt();
 
-        event.getJDA().getGuilds().forEach(guild -> builder
-                        .addField("Guild", guild.getName() + " `" + guild.getId() + "`", false)
-                        .addField("Owner", guild.getOwner() == null ? "Unknown" : "`" + guild.getOwner().getUser().getAsTag() + "`", false)
-                        .addField("Members", String.valueOf(guild.getMemberCount()), false)
-                        .setThumbnail(guild.getIconUrl() == null ? guild.getJDA().getSelfUser().getAvatarUrl() : guild.getIconUrl())
-        );
+        EmbedBuilder builder = new EmbedBuilder().setTitle("Server Count `" + event.getJDA().getGuilds().size() + "`" + " | Page `" + page + "`");
 
+        int count = 1;
+        for (Guild guild : event.getJDA().getGuilds()) {
+            String guildInfo =
+                    "Guild: " + guild.getName() + " `" + guild.getId() + "`\n" +
+                    "Owner: " + (guild.getOwner() == null ? "Unknown" : "`" + guild.getOwner().getUser().getAsTag() + "`") + "\n" +
+                    "Members: " + guild.getMemberCount() + "\n";
+
+            builder.addField("Guild Info", guildInfo, false);
+
+            if (builder.build().toString().length() + guildInfo.length() > 6000) {
+                count++;
+
+                if(count == page) {
+                    event.replyEmbeds(
+                            builder
+                                    .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
+                                    .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
+                                    .build()
+                            )
+                            .setEphemeral(true)
+                            .queue();
+                }
+
+                builder = new EmbedBuilder();
+            }
+        }
         builder.setFooter("Requested by " + event.getUser().getAsTag(), event.getUser().getAvatarUrl());
 
         event.replyEmbeds(
-                builder
-                        .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
-                        .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                        .build()
+                        builder
+                                .setColor(event.getMember() == null ? new Color(0) : event.getMember().getColor())
+                                .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
+                                .build()
                 )
                 .setEphemeral(true)
                 .queue();
