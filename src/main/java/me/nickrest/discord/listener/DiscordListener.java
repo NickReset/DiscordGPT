@@ -13,11 +13,7 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-<<<<<<< HEAD
 import java.util.List;
-=======
-import java.util.Objects;
->>>>>>> d2de53903b047586cb1cdfb507358f76428ce07a
 
 @AllArgsConstructor
 public class DiscordListener extends ListenerAdapter {
