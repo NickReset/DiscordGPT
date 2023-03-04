@@ -28,8 +28,8 @@ public class ListGuildsCommand extends Command {
 
         event.replyEmbeds(getEmbedForPage(page, event.getMember()))
                 .setActionRow(
-                        Button.secondary("listguilds:page:" + (Math.min(page - 1, 0)), "Previous"),
-                        Button.secondary("listguilds:page:" + (Math.max((page + 1), event.getJDA().getGuilds().size())), "Next")
+                        Button.secondary("listguilds:page:" + (page - 1), "Previous"),
+                        Button.secondary("listguilds:page:" + (page + 1), "Next")
                 )
                 .setEphemeral(true)
                 .queue();
