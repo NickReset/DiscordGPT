@@ -3,16 +3,19 @@ package me.nickrest.discord.listener;
 import lombok.AllArgsConstructor;
 import me.nickrest.Main;
 import me.nickrest.discord.Discord;
+import me.nickrest.discord.command.ButtonHandler;
 import me.nickrest.discord.command.Command;
 import me.nickrest.discord.manager.CommandManager;
 import me.nickrest.util.config.Config;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -39,7 +42,7 @@ public class DiscordListener extends ListenerAdapter {
             if(!devIds.contains(event.getUser().getId())) {
                 MessageEmbed embed = new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("You must be a developer of 1" + Main.getDiscord().getJda().getSelfUser().getName() +  "` to use this command.")
+                        .setDescription("You must be a developer of `1`" + Main.getDiscord().getJda().getSelfUser().getName() +  "` to use this command.")
                         .setColor(0xff0000)
                         .build();
 
@@ -61,11 +64,19 @@ public class DiscordListener extends ListenerAdapter {
 
         Main.getLogger().info("Handling command: " + event.getName());
         foundCommand.handle(event);
-//        Objects.requireNonNull(event.getJDA().getTextChannelById(logChannelID)).sendMessage("Command executed: " + event.getCommandString() + "\nExecutor: " + event.getUser().getName() + "(" + event.getUser().getId() + ")").queue();
     }
 
     @Override
-    public void onReady(@NotNull ReadyEvent event) {
-//        Objects.requireNonNull(event.getJDA().getTextChannelById(logChannelID)).sendMessage("Bot is ready!").queue();
+    public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
+        CommandManager commandManager = discord.getCommandManager();
+//
+        for(Command command : commandManager.getCommands()) {
+            ButtonHandler handler = command.getButtonHandler(event.getComponentId());
+
+            if(handler != null) {
+                handler.handle(event);
+                return;
+            }
+        }
     }
 }

@@ -1,13 +1,20 @@
 package me.nickrest.discord.manager;
 
 import lombok.Getter;
+import me.nickrest.Main;
+import me.nickrest.discord.command.ButtonHandler;
 import me.nickrest.discord.command.Command;
 import me.nickrest.discord.command.commands.*;
 import me.nickrest.discord.command.data.CommandArgument;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 public class CommandManager {
@@ -37,6 +44,25 @@ public class CommandManager {
                 .arguments(
                         CommandArgument.of(OptionType.INTEGER, "page", "The page to view", false)
                 )
+                .buttonHandlers(
+                        new ButtonHandler("listguilds:page") {
+                            @Override
+                            public void handle(@NotNull ButtonInteractionEvent event) {
+                                ListGuildsCommand command = (ListGuildsCommand) getCommand("listguilds");
+                                int pageInt = Integer.parseInt(event.getComponentId().split(":")[2]);
+
+                                if(pageInt < 1) pageInt = 1;
+                                if(pageInt > Main.getDiscord().getJda().getGuilds().size()) pageInt = Main.getDiscord().getJda().getGuilds().size();
+
+                                event.editMessageEmbeds(command.getEmbedForPage(pageInt, event.getMember()))
+                                        .setActionRow(
+                                                Button.secondary("listguilds:page:" + (pageInt - 1), "Previous"),
+                                                Button.secondary("listguilds:page:" + (pageInt + 1), "Next")
+                                        )
+                                        .queue();
+                            }
+                        }
+                )
         );
     }
 
@@ -47,4 +73,5 @@ public class CommandManager {
     public Command getCommand(String name) {
         return commands.stream().filter(command -> command.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
+
 }

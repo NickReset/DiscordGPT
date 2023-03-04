@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 @Getter @Setter
 public abstract class Command {
 
@@ -16,6 +18,8 @@ public abstract class Command {
     private String name, description;
     private DefaultMemberPermissions defaultMemberPermissions;
     private CommandArgument[] arguments = {};
+    private ButtonHandler[] buttonHandlers = {};
+
     private boolean guildOnly, devOnly;
 
     public Command() {
@@ -35,5 +39,14 @@ public abstract class Command {
     public Command arguments(CommandArgument... arguments) {
         this.arguments = arguments;
         return this;
+    }
+
+    public Command buttonHandlers(ButtonHandler... buttonHandlers) {
+        this.buttonHandlers = buttonHandlers;
+        return this;
+    }
+
+    public ButtonHandler getButtonHandler(String componentId) {
+        return Arrays.stream(buttonHandlers).filter(buttonHandler -> componentId.startsWith(buttonHandler.getPrefix())).findFirst().orElse(null);
     }
 }
