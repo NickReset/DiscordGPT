@@ -71,4 +71,7 @@ public class ListGuildsCommand extends Command {
                 .build();
     }
 
+    public int getPageCount() {
+        return Main.getDiscord().getJda().getGuilds().size();
+    }
 }

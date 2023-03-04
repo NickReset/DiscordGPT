@@ -52,7 +52,7 @@ public class CommandManager {
                                 int pageInt = Integer.parseInt(event.getComponentId().split(":")[2]);
 
                                 if(pageInt < 1) pageInt = 1;
-                                if(pageInt > Main.getDiscord().getJda().getGuilds().size()) pageInt = Main.getDiscord().getJda().getGuilds().size();
+                                if(pageInt > command.getPageCount()) pageInt = command.getPageCount();
 
                                 event.editMessageEmbeds(command.getEmbedForPage(pageInt, event.getMember()))
                                         .setActionRow(
