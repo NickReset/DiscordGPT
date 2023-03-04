@@ -43,7 +43,7 @@ public class DiscordListener extends ListenerAdapter {
                         .setColor(0xff0000)
                         .build();
 
-                event.replyEmbeds(embed).queue();
+                event.replyEmbeds(embed).setEphemeral(true).queue();
                 return;
             }
         }
