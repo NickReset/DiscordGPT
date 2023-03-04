@@ -26,6 +26,9 @@ public class ListGuildsCommand extends Command {
     public void handle(@NotNull SlashCommandInteractionEvent event) {
         int page = event.getOption("page") == null ? 1 : Objects.requireNonNull(event.getOption("page")).getAsInt();
 
+        if(page < 0) page = 1;
+        if(page > getPageCount()) page = getPageCount();
+
         event.replyEmbeds(getEmbedForPage(page, event.getMember()))
                 .setActionRow(
                         Button.secondary("listguilds:page:" + (page - 1), "Previous"),
