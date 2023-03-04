@@ -2,6 +2,7 @@ package me.nickrest.discord;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.nickrest.Main;
 import me.nickrest.discord.command.Command;
 import me.nickrest.discord.listener.DiscordListener;
 import me.nickrest.discord.manager.CommandManager;
@@ -27,7 +28,7 @@ public class Discord {
         this.token = token;
         this.commandManager = new CommandManager();
         this.jda = JDABuilder.createDefault(token).build();
-        this.jda.addEventListener(this.discordListener = new DiscordListener(this));
+        this.jda.addEventListener(this.discordListener = new DiscordListener(this, "1077752427878555768"));
 
         try {
             this.jda.awaitReady();
@@ -48,7 +49,7 @@ public class Discord {
 
         jda.updateCommands().addCommands(commandData).queue();
         // set the presence of the bot
-        jda.getPresence().setActivity(Activity.streaming("with GPT-3", "https://twitch.tv/discord"));
+        jda.getPresence().setActivity(Activity.streaming("with GPT-3.5", "https://twitch.tv/discord"));
     }
 
 }

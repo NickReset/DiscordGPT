@@ -18,7 +18,7 @@ public class GPTCommand extends Command {
 
     @Override
     public void handle(@NotNull SlashCommandInteractionEvent event) {
-        String startingText = "Hello! You are a bot named GPT that can talk to humans from Discord. Surround code with markdown ticks (```) and put the language after the first set of ticks. Only if the response has a code block." +
+        String startingText = "Hello! You are a bot named GPT that can talk to humans from Discord." +
 //                "\nUser: " +
 //                "   ID: " + event.getUser().getId() +
 //                "   Username: " + event.getUser().getName() +
@@ -28,10 +28,10 @@ public class GPTCommand extends Command {
 //                "   You are created by NickRest#3939 & God Mode#0949" +
 //                "   Make all responses sound human";
                 "\nYou are talking to the user " + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + " (" + event.getUser().getId() + ")"
-                + "The url to his/her avatar is " + event.getUser().getAvatarUrl()
-                + "You can ping him/her by typing <@" + event.getUser().getId() + ">"
-                + "You are created by OpenAI but you were modified by NickRest#3939 & God Mode#0949 to have a memory and to be able to talk to humans from Discord."
-                + "Make all responses sound human.";
+                + "\nThe url to his/her avatar is " + event.getUser().getAvatarUrl()
+                + "\nYou can ping him/her by typing <@" + event.getUser().getId() + ">"
+                + "\nYou are created by OpenAI but you were modified by NickRest#3939 & God Mode#0949 to have a memory and to be able to talk to humans from Discord."
+                + "\nMake all responses sound human.";
         OptionMapping textOption = event.getOption("text");
         event.deferReply().queue();
         User user = event.getUser();
@@ -44,16 +44,8 @@ public class GPTCommand extends Command {
         String response;
         List<String> userMemory = memory.computeIfAbsent(user.getId(), k -> new ArrayList<>());
 
-        if (userMemory.size() == 0) {
-            response = Main.getChatGPT().sendRequest(startingText + "\n" + text);
-        } else {
-            StringBuilder memoryBuilder = new StringBuilder();
-            for (String s : userMemory) {
-                memoryBuilder.append(s);
-            }
-            memoryBuilder.append("Q: ").append(text).append("\n").append("A: ");
-            response = Main.getChatGPT().sendRequest(startingText + "\n" + memoryBuilder);
-        }
+        response = Main.getChatGPT().sendRequest(text, user.getId(), startingText);
+
         try {
             Main.getLogger().info("Attempting to send response to the user.");
             event.getHook().editOriginal(response).queue();

@@ -9,15 +9,21 @@ import me.nickrest.util.config.Config;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+import java.util.Objects;
+>>>>>>> d2de53903b047586cb1cdfb507358f76428ce07a
 
 @AllArgsConstructor
 public class DiscordListener extends ListenerAdapter {
 
     private final Discord discord;
+    private final String logChannelID;
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
@@ -59,5 +65,11 @@ public class DiscordListener extends ListenerAdapter {
 
         Main.getLogger().info("Handling command: " + event.getName());
         foundCommand.handle(event);
+//        Objects.requireNonNull(event.getJDA().getTextChannelById(logChannelID)).sendMessage("Command executed: " + event.getCommandString() + "\nExecutor: " + event.getUser().getName() + "(" + event.getUser().getId() + ")").queue();
+    }
+
+    @Override
+    public void onReady(@NotNull ReadyEvent event) {
+//        Objects.requireNonNull(event.getJDA().getTextChannelById(logChannelID)).sendMessage("Bot is ready!").queue();
     }
 }
