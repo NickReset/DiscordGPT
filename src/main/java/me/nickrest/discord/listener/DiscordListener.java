@@ -39,7 +39,7 @@ public class DiscordListener extends ListenerAdapter {
             if(!devIds.contains(event.getUser().getId())) {
                 MessageEmbed embed = new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("You must be a developer of" + Main.getDiscord().getJda().getSelfUser().getName() +  " to use this command.")
+                        .setDescription("You must be a developer of 1" + Main.getDiscord().getJda().getSelfUser().getName() +  "` to use this command.")
                         .setColor(0xff0000)
                         .build();
 
